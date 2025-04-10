@@ -5,12 +5,13 @@ import logo from '../assets/greenShop.png';
 import search_icon from '../assets/search_icon.svg';
 import cart_icon from '../assets/nav_cart_icon.svg';
 import menu_icon from '../assets/menu_icon.svg';
+import profile_icon from '../assets/profile_icon.png';
 
 const Navbar = () => {
     const [open, setOpen] = React.useState(false)
-    const [user, setUser,showUserLogin,navigate] = useAppContext();
+    const [user, setUser, showUserLogin, navigate] = useAppContext();
 
-    const logout =async ()=>{
+    const logout = async () => {
         setUser(null);
         navigate('/')
     }
@@ -41,9 +42,21 @@ const Navbar = () => {
                     <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">3</button>
                 </div>
 
-                <button className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full">
-                    Login
-                </button>
+                {!user ? (
+                    <button className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full">
+                        Login
+                    </button>)
+                    :
+                    (
+                        <div className='related group'>
+                            <img src={profile_icon} alt="profile_icon" className="w-10" />
+                            <ul>
+                                <li>My Orders</li>
+                                <li>Logout</li>
+                            </ul>
+                        </div>
+                    )
+                }
             </div>
 
             <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="sm:hidden">
@@ -53,34 +66,34 @@ const Navbar = () => {
             </button>
 
             {/* Mobile Menu */}
-         {
-            open  && ( 
-               <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
-               <NavLink to='/' onClick={() => setOpen(false)}>Home</NavLink>
-               <NavLink to='/products' onClick={() => setOpen(false)}>All product</NavLink>
-               {user &&
-                   <NavLink to='/contact' onClick={() => setOpen(false)}>My Orders</NavLink>
-               }
+            {
+                open && (
+                    <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
+                        <NavLink to='/' onClick={() => setOpen(false)}>Home</NavLink>
+                        <NavLink to='/products' onClick={() => setOpen(false)}>All product</NavLink>
+                        {user &&
+                            <NavLink to='/contact' onClick={() => setOpen(false)}>My Orders</NavLink>
+                        }
 
-               {!user ? (
-                   <button onClick={()=>{
-                       setOpen(false);
-                       showUserLogin(true);
-                   }} className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
-                       Login
-                   </button>
+                        {!user ? (
+                            <button onClick={() => {
+                                setOpen(false);
+                                showUserLogin(true);
+                            }} className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
+                                Login
+                            </button>
 
-               ) : (
-                   <button onClick={logout} className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
-                       Logout
-                   </button>
-               )
+                        ) : (
+                            <button onClick={logout} className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
+                                Logout
+                            </button>
+                        )
 
-               }
+                        }
 
 
-           </div>
-         )}
+                    </div>
+                )}
 
         </nav>
     );
