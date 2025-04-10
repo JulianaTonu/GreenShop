@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAppContext } from '../context/AppContext';
 import logo from '../assets/greenShop.png';
 import search_icon from '../assets/search_icon.svg';
 import cart_icon from '../assets/nav_cart_icon.svg';
@@ -7,7 +8,12 @@ import menu_icon from '../assets/menu_icon.svg';
 
 const Navbar = () => {
     const [open, setOpen] = React.useState(false)
-    const [user, setUser] = useAppContext()
+    const [user, setUser,showUserLogin,navigate] = useAppContext();
+
+    const logout =async ()=>{
+        setUser(null);
+        navigate('/')
+    }
     return (
         <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
 
@@ -47,30 +53,34 @@ const Navbar = () => {
             </button>
 
             {/* Mobile Menu */}
-            <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
-                <NavLink to='/' onClick={() => setOpen(false)}>Home</NavLink>
-                <NavLink to='/products' onClick={() => setOpen(false)}>All product</NavLink>
-                {user &&
-                    <NavLink to='/contact' onClick={() => setOpen(false)}>My Orders</NavLink>
-                }
+         {
+            open  && ( 
+               <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
+               <NavLink to='/' onClick={() => setOpen(false)}>Home</NavLink>
+               <NavLink to='/products' onClick={() => setOpen(false)}>All product</NavLink>
+               {user &&
+                   <NavLink to='/contact' onClick={() => setOpen(false)}>My Orders</NavLink>
+               }
 
-                {!user ? (
-                    <button onClick={()=>{
-                        setOpen(false)
-                    }} className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
-                        Login
-                    </button>
+               {!user ? (
+                   <button onClick={()=>{
+                       setOpen(false);
+                       showUserLogin(true);
+                   }} className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
+                       Login
+                   </button>
 
-                ) : (
-                    <button className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
-                        Logout
-                    </button>
-                )
+               ) : (
+                   <button onClick={logout} className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
+                       Logout
+                   </button>
+               )
 
-                }
+               }
 
 
-            </div>
+           </div>
+         )}
 
         </nav>
     );
