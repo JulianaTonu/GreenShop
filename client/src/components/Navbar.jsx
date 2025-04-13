@@ -9,7 +9,7 @@ import profile_icon from '../assets/profile_icon.png';
 
 const Navbar = () => {
     const [open, setOpen] = React.useState(false)
-    const [user, setUser, showUserLogin, setShowUserLogin, navigate] = useAppContext();
+    const { user, setUser, showUserLogin, setShowUserLogin, navigate } = useAppContext();
 
     const logout = async () => {
         setUser(null);
@@ -28,7 +28,7 @@ const Navbar = () => {
             <div className="hidden sm:flex items-center gap-8">
                 <NavLink to='/'>Home</NavLink>
                 <NavLink to='/products'>All product</NavLink>
-                <NavLink to='/contact'>My orders</NavLink>
+                <NavLink to='/orders'>My orders</NavLink>
                 <NavLink to='/contact'>Contact</NavLink>
 
 
@@ -74,7 +74,7 @@ const Navbar = () => {
                         <NavLink to='/' onClick={() => setOpen(false)}>Home</NavLink>
                         <NavLink to='/products' onClick={() => setOpen(false)}>All product</NavLink>
                         {user &&
-                            <NavLink to='/contact' onClick={() => setOpen(false)}>My Orders</NavLink>
+                            <NavLink to='/my-orders' onClick={() => setOpen(false)}>My Orders</NavLink>
                         }
 
                         {!user ? (
