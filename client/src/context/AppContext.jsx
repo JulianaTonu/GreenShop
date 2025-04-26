@@ -42,7 +42,7 @@ export const AppContextProvider = ({ children }) => {
         setCartItems(cartData);
         toast.success("Cart Updated");
     };
-
+ 
     // Remove product from cart
     const removeFromCart = (itemId) => {
         let cartData = structuredClone(cartItems);
