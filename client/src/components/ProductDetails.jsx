@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { useParams, Link } from 'react-router-dom';
 import { assets } from '../assets/assets';
+import ProductCard from './ProductCard';
 const ProductDetails = () => {
 
     const { products, navigate, currency, addToCart } = useAppContext();
@@ -97,6 +98,14 @@ const ProductDetails = () => {
                 <div className='flex flex-col items-end w-max'>
                     <p className='text-2xl font-medium uppercase'>Related Products</p>
                     <div className='w-16 h-0.5 bg-primary rounded-full'></div>
+                </div>
+
+                <div className='mt-10 grid grid-cols-1 items-center m-auto sm:grid-cols-3 md:grid-cols-3 gap-3 
+            md:gap-6 xl:grid-cols-5 '>
+                    {relatedProducts.filter((product) =>
+                        product.inStock).map((product, index) => (
+                            <ProductCard key={index} product={product} />
+                        ))}
                 </div>
             </div>
 
