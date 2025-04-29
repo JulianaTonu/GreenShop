@@ -13,6 +13,7 @@ export const AppContextProvider = ({ children }) => {
     const [seller, setSeller] = useState(false);
     const [showUserLogin, setShowUserLogin] = useState(false);
     const [products, setProducts] = useState([]);
+    const [searchQuery, setSearchQuery] = useState([]);
 
     const [cartItems, setCartItems] = useState([]); // Fixed destructuring issue
 
@@ -76,6 +77,8 @@ export const AppContextProvider = ({ children }) => {
         updateCartItem,
         removeFromCart,
         cartItems,
+        searchQuery,
+        setSearchQuery
     };
 
     return (
