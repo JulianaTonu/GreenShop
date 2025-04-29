@@ -43,7 +43,7 @@ export const AppContextProvider = ({ children }) => {
         setCartItems(cartData);
         toast.success("Cart Updated");
     };
- 
+
     // Remove product from cart
     const removeFromCart = (itemId) => {
         let cartData = structuredClone(cartItems);
@@ -59,6 +59,17 @@ export const AppContextProvider = ({ children }) => {
         toast.success("Removed From Cart");
     };
 
+    // Get Cart Item Count
+    const getCartCount = () => {
+        let totalCount = 0;
+        for (const item in cartItems) {
+            totalCount += cartItems[item];
+        }
+
+        return totalCount;
+    }
+
+ 
     useEffect(() => {
         fetchProducts();
     }, []);
@@ -78,7 +89,9 @@ export const AppContextProvider = ({ children }) => {
         removeFromCart,
         cartItems,
         searchQuery,
-        setSearchQuery
+        setSearchQuery,
+        getCartCount,
+        
     };
 
     return (
