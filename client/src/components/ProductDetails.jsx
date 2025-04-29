@@ -90,6 +90,18 @@ const ProductDetails = () => {
                 </div>
             </div>
 
+
+            {/* //Related Product  */}
+
+            <div className='mt-16 flex flex-col items-center m-auto'>
+                <div className='flex flex-col items-end w-max'>
+                    <p className='text-2xl font-medium uppercase'>Related Products</p>
+                    <div className='w-16 h-0.5 bg-primary rounded-full'></div>
+                </div>
+            </div>
+
+
+
         </div>
     );
 };
