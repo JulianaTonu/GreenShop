@@ -10,7 +10,7 @@ export const AppContextProvider = ({ children }) => {
 
     const navigate = useNavigate();
     const [user, setUser] = useState(true);
-    const [seller, setSeller] = useState(false);
+    const [ isSeller, setIsSeller ] = useState(false);
     const [showUserLogin, setShowUserLogin] = useState(false);
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState([]);
@@ -88,8 +88,8 @@ export const AppContextProvider = ({ children }) => {
         navigate,
         user,
         setUser,
-        seller,
-        setSeller,
+        isSeller,
+        setIsSeller ,
         showUserLogin,
         setShowUserLogin,
         products,
