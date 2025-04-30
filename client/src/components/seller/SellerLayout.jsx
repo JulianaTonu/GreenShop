@@ -23,11 +23,11 @@ const SellerLayout = () => {
         <>
             <div className="flex items-center justify-between px-4 md:px-8 border-b border-gray-300 py-3 bg-white ">
                 <Link to="/">
-                    <img className="h-9" src={assets.logo} alt="dummyLogoColored" />
+                    <img className="h-12 w-36" src={assets.greenShop} alt="dummyLogoColored" />
                 </Link>
                 <div className="flex items-center gap-5 text-gray-500">
                     <p>Hi! Admin</p>
-                    <button onClick={logout} className='border rounded-full text-sm px-4 py-1'>Logout</button>
+                    <button onClick={logout} className='border rounded-full text-sm px-4 py-1 cursor-pointer hover:text-amber-50 hover:bg-primary'>Logout</button>
                 </div>
             </div>
             <div className="flex">
