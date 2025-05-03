@@ -77,7 +77,7 @@ export const login = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
         res.cookie('token', token, {
-            httpOnly: true, 
+            httpOnly: true,
             secure: process.env.NODE_ENV === 'production', //use secure cookiees in production
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', //CSRF protection 
             maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -91,7 +91,7 @@ export const login = async (req, res) => {
                 name: user.name
             }
         })
-        
+
 
     } catch (error) {
         console.error("login Error:", error.message); // show main error
@@ -99,5 +99,17 @@ export const login = async (req, res) => {
             success: false,
             message: "Server error. Please try again later.",
         });
+    }
+}
+
+
+//Check Auth: /api/user/is-auth
+export const isMatch = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const user = await User.findByid(userId).select("password")
+        return res.json({success:true, user})
+    } catch (error) {
+
     }
 }
