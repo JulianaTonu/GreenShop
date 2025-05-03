@@ -108,8 +108,23 @@ export const isMatch = async (req, res) => {
     try {
         const { userId } = req.body;
         const user = await User.findByid(userId).select("password")
-        return res.json({success:true, user})
+        return res.json({ success: true, user })
     } catch (error) {
 
+    }
+}
+
+// Logout User : /api/user/logout
+export const logout = async (req, res) => {
+    try {
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+        })
+        res.json({ success: true, message: "Logged Out" })
+    } catch (error) {
+        console.log(error.message)
+        res.json({ success: false, message: error.message })
     }
 }
