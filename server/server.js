@@ -6,12 +6,14 @@ import connectDB from './configs/db.js';
 import userRouter from './routes/userRouter.js';
 import dotenv from 'dotenv';
 import sellerRouter from './routes/sellerRoute.js';
+import connectCloudinary from './configs/cloudinary.js';
 dotenv.config()
 
 const app = express();
 const port = process.env.PORT || 4000;
 
 await connectDB()
+await connectCloudinary()
 
 //allow multipleOrigins
 const allowedOrigins = ['http://localhost:5173']
