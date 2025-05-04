@@ -5,6 +5,7 @@ import connectDB from './configs/db.js';
 
 import userRouter from './routes/userRouter.js';
 import dotenv from 'dotenv';
+import sellerRouter from './routes/sellerRoute.js';
 dotenv.config()
 
 const app = express();
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
   });
   
 app.use('/api/user',userRouter)
+app.use('api/seller',sellerRouter)
 
 app.listen(port, () => {
     console.log(`server is running on Port ${port}`)
