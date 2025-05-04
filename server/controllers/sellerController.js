@@ -27,4 +27,14 @@ export const sellerLogin = async (req, res) => {
     }
 }
 
+//Seller Auth: /api/seller/auth
+export const isSellerAuth = async (req, res) => {
+    try {
+        return res.status(404).json({ success: false, message: "User not found" });
+    } catch (error) {
+        console.log("isAuth error:", error.message);
+        return res.json({ success: false, message: error.message });
+    }
+}
+
 
