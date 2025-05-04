@@ -1,5 +1,13 @@
-const authUser = async (req, res, next) => {
+
+import jwt from 'jsonwebtoken';
+
+
+
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
+const authUser = async (req,res,next) => {
     const { token } = req.cookies
+    // console.log("Token:", token);
 
     if (!token) {
         return res.json({
@@ -10,9 +18,11 @@ const authUser = async (req, res, next) => {
     }
 
     try {
-        const tokenDecode = jwt.verify(token.process.env.JWT_SECRET)
+        const tokenDecode = jwt.verify(token,process.env.JWT_SECRET)
+        // console.log("tokenDecode:", tokenDecode.id);
+
         if (tokenDecode.id) {
-            req.body.userId = tokenDecode.id;
+            req.user = tokenDecode.id;
         } else {
             return res.json({
                 success: false, message: "not Authorized"
@@ -20,6 +30,8 @@ const authUser = async (req, res, next) => {
         }
         next();
     } catch (error) {
+        console.log("isAuth error:", error.message);
+
         return res.json({
             success: false, message: "not Authorized"
         })

@@ -103,16 +103,21 @@ export const login = async (req, res) => {
 }
 
 
-//Check Auth: /api/user/is-auth
-export const isMatch = async (req, res) => {
+//Check Auth: /api/user/auth
+export const isAuth = async (req, res) => {
     try {
-        const { userId } = req.body;
-        const user = await User.findByid(userId).select("password")
-        return res.json({ success: true, user })
+        const user = await User.findById(req.user).select("-password");
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+        console.log("user:", user);
+        return res.json({ success: true, user });
     } catch (error) {
-
+        console.log("isAuth error:", error.message);
+        res.status(500).json({ success: false, message: error.message });
     }
 }
+
 
 // Logout User : /api/user/logout
 export const logout = async (req, res) => {

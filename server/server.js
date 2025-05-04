@@ -23,7 +23,11 @@ app.use(cors({ origin: allowedOrigins, credentials: true }))
 app.get('/', (req, res) =>
     res.send("API is working")
 )
-
+app.use((req, res, next) => {
+    console.log("Received cookies:", req.cookies);
+    next();
+  });
+  
 app.use('/api/user',userRouter)
 
 app.listen(port, () => {
