@@ -76,7 +76,7 @@ export const login = async (req, res) => {
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
-        res.cookie('token', token, {
+        res.cookie('sellerToken', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', //use secure cookiees in production
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', //CSRF protection 
