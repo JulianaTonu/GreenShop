@@ -49,3 +49,15 @@ export const getUserOrders = async (req, res) => {
     }
 }
 
+//all orders data (for Seller/admin): /api/order/seller
+export const getAllOrder = async (req, res) => {
+    try {
+        const orders = await Order.find({
+            $or: [{ paymentType: "COD" }, { isPaid: true }]
+        }).populate("items.product address").sort({ createdAt: -1 });
+        res.json({ success: true, orders });
+
+    } catch (error) {
+        return res.json({ success: false, message: error.message })
+    }
+}
