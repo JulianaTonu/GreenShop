@@ -37,9 +37,9 @@ app.use((req, res, next) => {
   
 app.get('/', (req, res) =>res.send("API is working"))
 app.use('/api/user',userRouter)
-app.use('api/seller',sellerRouter)
-app.use('api/product',productRouter)
-app.use('api/cart',cartRouter)
+app.use('/api/seller',sellerRouter)
+app.use('/api/product',productRouter)
+app.use('/api/cart',cartRouter)
 app.use('/api/address', addressRoute)
 app.use('/api/order', orderRouter)
 

@@ -1,16 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // ⬅️ Import useNavigate directly
+// import { useNavigate } from 'react-router-dom'; // ⬅️ Import useNavigate directly
 import { useAppContext } from '../../context/AppContext';
+import toast from 'react-hot-toast';
 
 const SellerLogin = () => {
-    const { isSeller, setIsSeller } = useAppContext();
-    const navigate = useNavigate(); // ⬅️ Use it directly here
+    const { isSeller, setIsSeller, axios,navigate } = useAppContext();
+    // const navigate = useNavigate(); // ⬅️ Use it directly here
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const onSubmitHandler = async (event) => {
-        event.preventDefault();
-        setIsSeller(true); // This will trigger useEffect
+        try {
+            event.preventDefault();
+            const { data } = await axios.post('/api/seller/login', {email,password})
+            if(data.success){
+                setIsSeller(true)
+                navigate('/seller')
+            }else{
+                console.log("error",data.message)
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.log("error",error.message)
+            toast.error(error.message)            
+        }
     };
 
     useEffect(() => {

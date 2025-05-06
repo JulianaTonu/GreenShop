@@ -2,20 +2,43 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dummyProducts } from "../assets/assets.js";
 import toast from "react-hot-toast";
+import axios from 'axios'
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
 export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
+
     const currency = import.meta.env.VITE_CURRENCY; // Fixed VITE_CURRENCY access
 
     const navigate = useNavigate();
     const [user, setUser] = useState(true);
-    const [ isSeller, setIsSeller ] = useState(false);
+    const [isSeller, setIsSeller] = useState(false);
     const [showUserLogin, setShowUserLogin] = useState(false);
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState([]);
 
     const [cartItems, setCartItems] = useState([]); // Fixed destructuring issue
+
+    //Fetch Seller Status
+    const fetchSeller = async () => {
+        try {
+            const { data } = await axios.get('/api/seller/auth');
+            if (data.success) {
+                setIsSeller(true)
+            } else {
+                setIsSeller(false)
+            }
+        } catch (error) {
+            console.log(error)
+            setIsSeller(false)
+
+        }
+    }
+
+
 
     // Fetch all products
     const fetchProducts = async () => {
@@ -81,6 +104,7 @@ export const AppContextProvider = ({ children }) => {
         return Math.floor(totalAmount * 100) / 100;
     }
     useEffect(() => {
+        fetchSeller()
         fetchProducts();
     }, []);
 
@@ -89,7 +113,7 @@ export const AppContextProvider = ({ children }) => {
         user,
         setUser,
         isSeller,
-        setIsSeller ,
+        setIsSeller,
         showUserLogin,
         setShowUserLogin,
         products,
@@ -101,7 +125,8 @@ export const AppContextProvider = ({ children }) => {
         searchQuery,
         setSearchQuery,
         getCartCount,
-        getCartAmount
+        getCartAmount,
+        axios
     };
 
     return (
