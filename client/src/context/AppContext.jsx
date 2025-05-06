@@ -66,14 +66,14 @@ export const AppContextProvider = ({ children }) => {
                 setCartItems(data.user.cartItems);
             } else {
                 setUser(null);
-                
+
             }
         } catch (error) {
-            
+
             toast.error(error.message);
         }
     };
-    
+
 
 
 
@@ -136,9 +136,33 @@ export const AppContextProvider = ({ children }) => {
         return Math.floor(totalAmount * 100) / 100;
     }
     useEffect(() => {
+        fetchUser()
         fetchSeller()
         fetchProducts();
     }, []);
+
+    //update database cartItems
+    useEffect(() => {
+        const updateCart = async () => {
+            try {
+                const { data } = await axios.post('/api/cart/update', {
+                    userId: user?._id,
+                    cartItems,
+                });
+    
+                if (!data.success) {
+                    toast.error(data.message);
+                }
+            } catch (error) {
+                toast.error(error.message);
+            }
+        };
+    
+        if (user && user._id) {
+            updateCart();
+        }
+    }, [cartItems]);
+    
 
     const value = {
         navigate,
