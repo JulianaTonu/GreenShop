@@ -20,6 +20,7 @@ const Login = () => {
             if(data.success){
                 navigate('/')
                 setUser(data.user)
+                console.log('user',data.user)
                 setShowUserLogin(false)
             }else{
                 toast.error(data.message);

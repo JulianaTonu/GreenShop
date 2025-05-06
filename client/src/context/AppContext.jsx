@@ -42,18 +42,40 @@ export const AppContextProvider = ({ children }) => {
 
     // Fetch all products
     const fetchProducts = async () => {
-    try {
-        const {data} =await axios.get('/api/product/list')
-        if(data.success){
-            setProducts(data.products)
-        }else{
-            toast.error(data.message)
-        }
-    } catch (error) {
-        toast.error(error.message)
+        try {
+            const { data } = await axios.get('/api/product/list')
+            if (data.success) {
+                setProducts(data.products)
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
 
-    }
+        }
     };
+
+
+    //fetch User Auth Status, User data & Cart items
+
+    const fetchUser = async () => {
+        try {
+            const { data } = await axios.get('api/user/auth');
+            if (data.success) {
+                setUser(data.user);
+                setCartItems(data.user.cartItems);
+            } else {
+                setUser(null);
+                
+            }
+        } catch (error) {
+            
+            toast.error(error.message);
+        }
+    };
+    
+
+
 
     // Add product to cart
     const addToCart = (itemId) => { // Added itemId parameter
@@ -137,7 +159,8 @@ export const AppContextProvider = ({ children }) => {
         getCartCount,
         getCartAmount,
         axios,
-        fetchProducts
+        fetchProducts,
+        fetchUser,
     };
 
     return (

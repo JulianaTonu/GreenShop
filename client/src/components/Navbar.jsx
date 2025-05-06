@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import logo from '../assets/greenShop.png';
@@ -6,14 +6,28 @@ import search_icon from '../assets/search_icon.svg';
 import cart_icon from '../assets/nav_cart_icon.svg';
 import menu_icon from '../assets/menu_icon.svg';
 import profile_icon from '../assets/profile_icon.png';
+import toast from 'react-hot-toast';
 
 const Navbar = () => {
-    const [open, setOpen] = React.useState(false)
-    const { user, setUser, showUserLogin, setShowUserLogin, navigate, searchQuery, setSearchQuery, getCartCount } = useAppContext();
+    const [open, setOpen] =useState(false)
+    const { user, setUser, showUserLogin, setShowUserLogin, navigate, searchQuery, setSearchQuery, getCartCount, axios } = useAppContext();
 
     const logout = async () => {
-        setUser(null);
-        navigate('/')
+        try {
+            const { data } = await axios.get('/api/user/logout')
+            if (data.success) { 
+                setUser(null)
+                toast.success(data.message)
+                navigate('/')
+            } else {
+                toast.error(data.message)
+
+            }
+        } catch (error) {
+            toast.error(error.message)
+
+        }
+
     }
 
     useEffect(() => {
@@ -69,7 +83,7 @@ const Navbar = () => {
             </div>
 
 
-{/* // cart for mobile  */}
+            {/* // cart for mobile  */}
             <div className='flex items-center gap-6 sm:hidden'>
                 <div onClick={() => navigate("/cart")} className="relative cursor-pointer">
                     <img src={cart_icon} alt='cart' className='w-6 opacity-80' />
@@ -79,13 +93,13 @@ const Navbar = () => {
                 </div>
 
                 <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="">
-                {/* Menu Icon SVG */}
-                <img src={menu_icon} alt='menu' className='w-6 opacity-80' />
+                    {/* Menu Icon SVG */}
+                    <img src={menu_icon} alt='menu' className='w-6 opacity-80' />
 
-            </button>
+                </button>
             </div>
 
-           
+
 
             {/* Mobile Menu */}
             {

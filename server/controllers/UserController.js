@@ -76,7 +76,7 @@ export const login = async (req, res) => {
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
-        res.cookie('sellerToken', token, {
+        res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', //use secure cookiees in production
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', //CSRF protection 
@@ -130,6 +130,6 @@ export const logout = async (req, res) => {
         res.json({ success: true, message: "Logged Out" })
     } catch (error) {
         console.log(error.message)
-        res.json({ success: false, message: error.message })
+        res.json({ success: false, message: 'error.message' })
     }
 }
