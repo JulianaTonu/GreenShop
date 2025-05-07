@@ -43,6 +43,10 @@ const {axios,navigate,user} =useAppContext()
 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
+        if (!user?._id) {
+            toast.error("User not logged in");
+            return;
+          }
         try {
             const {data} =await axios.post('/api/address/add',{
                 address,

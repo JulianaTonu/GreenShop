@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 
 const Cart = () => {
     const { products, currency, cartItems, removeFromCart,
-        getCartCount, updateCartItem, navigate, getCartAmount,axios,user } = useAppContext()
+        getCartCount, updateCartItem, navigate, getCartAmount, axios, user,setCartItems } = useAppContext()
 
     const [cartArray, setCartArray] = useState([])
     const [addresses, setAddresses] = useState([])
@@ -24,29 +24,29 @@ const Cart = () => {
         setCartArray(tempArray)
     }
 
-const getUserAddress =async()=>{
-    try {
-        const {data}= await axios.get(`/api/address/get?userId=${user?._id}`);
-    if(data.success){
-        setAddresses(data.addresses)
-        if(data.addresses.length > 0){
-            setSelectedAddress(data.addresses[0])
+    const getUserAddress = async () => {
+        try {
+            const { data } = await axios.get(`/api/address/get?userId=${user?._id}`);
+            if (data.success) {
+                setAddresses(data.addresses)
+                if (data.addresses.length > 0) {
+                    setSelectedAddress(data.addresses[0])
+                }
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+
         }
-    }else{
-        toast.error(data.message)
     }
-    } catch (error) {
-        toast.error(error.message)
-
-    }
-}
 
 
-useEffect(()=>{
-if(user){
-    getUserAddress()
-}
-},[user])
+    useEffect(() => {
+        if (user) {
+            getUserAddress()
+        }
+    }, [user])
 
     useEffect(() => {
         if (products.length > 0 && cartItems) {
@@ -54,8 +54,35 @@ if(user){
         }
     }, [products, cartItems])
 
-    const placeOrder =async()=>{
+    const placeOrder = async () => {
+        try {
+            if (!selectedAddress) {
+                return toast.error("Please select an address")
+            }
 
+            // place Order with COD
+            if (paymentOption === 'COD') {
+                const { data } = await axios.post('/api/order/cod', {
+                    userId: user._id,
+                    items: cartArray.map(item => ({
+                        product: item._id,
+                        quantity: item.quantity
+                    })),
+                    address: selectedAddress._id
+                })
+                if(data.success){
+                    toast.success(data.message)
+                    setCartItems({})
+                    navigate('/my-orders')
+                }else{
+                    toast.error(data.message)
+
+                }
+            }
+        } catch (error) {
+            toast.error(error.message)
+
+        }
     }
 
     return products.length > 0 && cartItems ? (
@@ -83,9 +110,9 @@ if(user){
                                     <p>Weight: <span>{product.size || "N/A"}</span></p>
                                     <div className='flex items-center'>
                                         <p>Qty:</p>
-                                        <select onChange={e=>updateCartItem(product._id,Number(e.target.value))}
-                                        value={cartItems[product._id]}
-                                         className='outline-none'>
+                                        <select onChange={e => updateCartItem(product._id, Number(e.target.value))}
+                                            value={cartItems[product._id]}
+                                            className='outline-none'>
                                             {Array(cartItems[product._id] > 9 ? cartItems[product._id] : 9).fill('').map((_, index) => (
                                                 <option key={index} value={index + 1}>{index + 1}</option>
                                             ))}
@@ -96,7 +123,7 @@ if(user){
                         </div>
                         <p className="text-center">{currency}{product.offerPrice * product.quantity}</p>
                         <button onClick={() => removeFromCart(product._id)}
-                         className="cursor-pointer mx-auto">
+                            className="cursor-pointer mx-auto">
                             <img src={assets.remove_icon} alt="remove"
                                 className='inline-block w-6 h-6' />
                         </button>
@@ -160,7 +187,7 @@ if(user){
 
                 <div className="text-gray-500 mt-4 space-y-2">
                     <p className="flex justify-between">
-                        <span>Price</span><span>{currency}{getCartAmount}</span>
+                        <span>Price</span><span>{currency}{getCartAmount()}</span>
                     </p>
                     <p className="flex justify-between">
                         <span>Shipping Fee</span><span className="text-green-600">Free</span>
@@ -176,7 +203,7 @@ if(user){
 
                 <button onClick={placeOrder} className="w-full py-3 mt-6 cursor-pointer bg-primary
                  text-white font-medium hover:bg-primary-dull transition">
-                  {paymentOption === "COD" ? "Place Order" : "proceed to Checkout"}
+                    {paymentOption === "COD" ? "Place Order" : "proceed to Checkout"}
                 </button>
             </div>
         </div>
