@@ -1,5 +1,7 @@
 import Order from "../models/Order.js"
 import Product from "../models/Product.js"
+import mongoose from "mongoose"
+
 
 //place Order COD : /api/order/cod
 export const placeOrderCOD = async (req, res) => {
@@ -37,17 +39,19 @@ export const placeOrderCOD = async (req, res) => {
 //GET Orders by Using  ID : /api/order/user
 export const getUserOrders = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const userId = req.query.userId; // ✅ Correct for GET requests
+        console.log("Requesting orders for userId:", userId);
+
         const orders = await Order.find({
-            userId,
+            userId: new mongoose.Types.ObjectId(userId), // Ensure it's an ObjectId
             $or: [{ paymentType: "COD" }, { isPaid: true }]
         }).populate("items.product address").sort({ createdAt: -1 });
-        res.json({ success: true, orders })
-    } catch (error) {
-        return res.json({ success: false, message: error.message })
 
+        res.json({ success: true, orders });
+    } catch (error) {
+        return res.json({ success: false, message: error.message });
     }
-}
+};
 
 //all orders data (for Seller/admin): /api/order/seller
 export const getAllOrder = async (req, res) => {

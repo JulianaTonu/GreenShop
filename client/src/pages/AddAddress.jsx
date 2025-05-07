@@ -43,6 +43,7 @@ const {axios,navigate,user} =useAppContext()
 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
+        if (user === null) return; // wait until user is loaded
         if (!user?._id) {
             toast.error("User not logged in");
             return;
