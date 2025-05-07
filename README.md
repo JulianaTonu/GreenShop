@@ -4,6 +4,7 @@ Seller Login : email- admin@example.com, password- greenShop123
 
 
 📌 Highlights
+
 🛒 Real-time cart management using Context API
 
 🧾 Stripe Checkout integration for online payments
@@ -12,7 +13,9 @@ Seller Login : email- admin@example.com, password- greenShop123
 
 📁 Cloudinary integration for storing and optimizing product images
 
+
 🧰 Tech Stack
+
 Frontend: React.js, Tailwind CSS, HTML, PrebuiltUI, React Hook Form, Context API
 
 Backend: Node.js, Express.js, MongoDB, Mongoose
