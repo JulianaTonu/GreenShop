@@ -1,7 +1,7 @@
 import Order from "../models/Order.js"
 import Product from "../models/Product.js"
 import mongoose from "mongoose"
-import stripe from stripe;
+import Stripe from 'stripe';
 
 //place Order COD : /api/order/cod
 export const placeOrderCOD = async (req, res) => {
@@ -72,24 +72,25 @@ export const placeOrderStripe = async (req, res) => {
         });
 
         //Stripe Gateway Initialize
-        const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
-
+        const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
+        console.log('stripe key', process.env.STRIPE_SECRET_KEY)
+        
         //create line items for stripe
-        const line_items =productData.map((item)=>{
-            return{
-                price_Data:{
+        const line_items =productData.map((item)=>({
+            
+                price_data:{
                     currency:"usd",
                     product_data:{
                         name:item.name,
                     },
-                    unit_amount:Math.floor(item.price + item.price * 0.02) * 100
+                    unit_amount:Math.floor( item.price * 0.02)
                 },
                 quantity:item.quantity,
-            }
-        })
+            
+        }))
 
         //create Session
-        const session = await stripeInstance.checkout.session.create({
+        const session = await stripeInstance.checkout.sessions.create({
             line_items,
             mode:"payment",
             success_url:`${origin}/loader?next=my-orders`,
@@ -100,12 +101,12 @@ export const placeOrderStripe = async (req, res) => {
             }
         }
         )
-
         return res.json({ success: true, url:session.url })
 
 
     } catch (error) {
-        return res.json({ success: false, message: "Invalid data" })
+        console.error(error);
+        return res.status(500).json({ success: false, message: error.message });
 
     }
 }
